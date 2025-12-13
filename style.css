@@ -1,3 +1,8 @@
+/* ============================================
+   DUCKLING WITH A KNIFE RPG - STYLES
+   ============================================ */
+
+/* Reset and Base Styles */
 * {
     margin: 0;
     padding: 0;
@@ -6,149 +11,568 @@
 
 body {
     font-family: 'Courier New', monospace;
-    background: linear-gradient(135deg, #87CEEB, #E0F7FF);
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
     min-height: 100vh;
     padding: 20px;
+    color: #fff;
+    overflow-x: hidden;
 }
 
+/* Game Container */
 .game-container {
-    max-width: 850px;
+    max-width: 900px;
     margin: 0 auto;
-    background: white;
+    background: rgba(0, 0, 0, 0.8);
     border-radius: 20px;
     padding: 25px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    border: 8px solid #FFD700;
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+    border: 4px solid #00ffcc;
+    position: relative;
 }
 
+/* Decorative corners */
+.game-container::before,
+.game-container::after {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 40px;
+}
+
+.game-container::before {
+    top: -4px;
+    left: -4px;
+    border-top: 4px solid #ff6b6b;
+    border-left: 4px solid #ff6b6b;
+    border-radius: 10px 0 0 0;
+}
+
+.game-container::after {
+    bottom: -4px;
+    right: -4px;
+    border-bottom: 4px solid #ff6b6b;
+    border-right: 4px solid #ff6b6b;
+    border-radius: 0 0 10px 0;
+}
+
+/* Header */
 header {
     text-align: center;
     margin-bottom: 25px;
-    padding-bottom: 15px;
-    border-bottom: 3px dashed #FF6B6B;
+    padding-bottom: 20px;
+    border-bottom: 3px solid #ff6b6b;
+    position: relative;
+}
+
+header::after {
+    content: '🔪';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 24px;
+    background: #1a1a2e;
+    padding: 0 15px;
 }
 
 h1 {
     font-family: 'Press Start 2P', cursive;
-    color: #FF6B6B;
-    font-size: 2.2em;
-    text-shadow: 3px 3px 0 #FFD700;
-    margin-bottom: 10px;
+    color: #ff6b6b;
+    font-size: 2.5em;
+    text-shadow: 
+        3px 3px 0 #ffd700,
+        6px 6px 0 rgba(255, 107, 107, 0.3);
+    margin-bottom: 15px;
+    letter-spacing: 2px;
+    background: linear-gradient(45deg, #ff6b6b, #ffd700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .tagline {
     font-style: italic;
-    color: #555;
-    font-size: 1.1em;
+    color: #00ffcc;
+    font-size: 1.2em;
+    text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+    margin-top: 10px;
 }
 
+/* Game Area */
 .game-area {
-    background: #E8F5E9;
+    background: rgba(30, 30, 46, 0.9);
     border-radius: 15px;
     padding: 20px;
     margin-bottom: 25px;
-    border: 5px solid #4CAF50;
+    border: 3px solid #4e54c8;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
 }
 
-#gameCanvas {
-    display: block;
-    margin: 0 auto 20px;
-    background: #A5D6A7;
-    border-radius: 10px;
-    border: 3px solid #388E3C;
-    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.hud {
-    display: flex;
-    justify-content: space-around;
-    background: #FFF3E0;
-    padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    border: 2px solid #FFB74D;
-}
-
-.stat {
-    font-size: 1.3em;
-    font-weight: bold;
-}
-
-.label {
-    color: #5D4037;
-    margin-right: 10px;
-}
-
-#breadCount { color: #8D6E63; }
-#healthCount { color: #E53935; }
-#knifeStatus { color: #3949AB; }
-
-.controls {
-    text-align: center;
-    background: #E3F2FD;
-    padding: 15px;
-    border-radius: 10px;
-    border: 2px solid #2196F3;
-}
-
-kbd {
-    background: #333;
+/* RPG HUD */
+.rpg-hud {
+    background: linear-gradient(135deg, #0f3460, #1a1a2e);
     color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-family: monospace;
+    padding: 20px;
+    border-radius: 15px;
+    border: 3px solid #ffd700;
+    font-family: 'Press Start 2P', cursive;
+    margin-bottom: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    position: relative;
+    overflow: hidden;
 }
 
-button {
-    background: #FF9800;
+.rpg-hud::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, 
+        #ff6b6b, #ffd700, #00ffcc, #4e54c8, #ff6b6b);
+    animation: rainbow-border 3s linear infinite;
+}
+
+@keyframes rainbow-border {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+}
+
+.hud-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.hud-row:last-child {
+    margin-bottom: 0;
+}
+
+/* Health Bar */
+.health-bar {
+    width: 250px;
+    height: 25px;
+    background: #333;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid #444;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+    position: relative;
+}
+
+.health-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #2ecc71, #27ae60);
+    width: 100%;
+    transition: width 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    position: relative;
+    overflow: hidden;
+}
+
+.health-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.2) 50%,
+        transparent 100%
+    );
+    animation: shine 2s infinite;
+}
+
+@keyframes shine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Bread Counter */
+.bread-count {
+    color: #f1c40f;
+    font-size: 22px;
+    text-shadow: 0 0 10px rgba(241, 196, 15, 0.5);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 8px 15px;
+    border-radius: 10px;
+    border: 2px solid #f39c12;
+}
+
+.bread-count::before {
+    content: '💰';
+    font-size: 24px;
+}
+
+/* RPG Buttons */
+.rpg-btn {
+    background: linear-gradient(135deg, #ff6b6b, #ff4757);
     color: white;
     border: none;
-    padding: 10px 20px;
-    margin: 10px;
+    padding: 12px 24px;
+    margin: 5px;
     border-radius: 50px;
     font-weight: bold;
     cursor: pointer;
+    font-size: 16px;
+    font-family: 'Press Start 2P', cursive;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+    position: relative;
+    overflow: hidden;
+    min-width: 120px;
+}
+
+.rpg-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(255, 107, 107, 0.6);
+    background: linear-gradient(135deg, #ff4757, #ff3838);
+}
+
+.rpg-btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 3px 10px rgba(255, 107, 107, 0.4);
+}
+
+.rpg-btn::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.1);
+    transform: rotate(45deg);
+    transition: all 0.3s;
+}
+
+.rpg-btn:hover::after {
+    left: 100%;
+}
+
+/* Specific button styles */
+#attackBtn {
+    background: linear-gradient(135deg, #ff3838, #ff0000);
+}
+
+#quackBtn {
+    background: linear-gradient(135deg, #00cec9, #0984e3);
+}
+
+#shopBtn {
+    background: linear-gradient(135deg, #00b894, #00cec9);
+}
+
+#sleepBtn {
+    background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+}
+
+/* Game Canvas */
+#gameCanvas {
+    display: block;
+    margin: 0 auto 20px;
+    background: #2a5c3d;
+    border-radius: 10px;
+    border: 4px solid #1a3d2a;
+    box-shadow: 
+        inset 0 0 20px rgba(0, 0, 0, 0.5),
+        0 0 30px rgba(0, 255, 0, 0.2);
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+/* Game Log */
+.game-log {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px solid #4e54c8;
+    margin-top: 20px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.game-log h3 {
+    color: #00ffcc;
+    font-family: 'Press Start 2P', cursive;
+    margin-bottom: 15px;
     font-size: 1em;
-    transition: transform 0.2s;
+    border-bottom: 2px solid #00ffcc;
+    padding-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-button:hover {
-    transform: scale(1.05);
-    background: #F57C00;
+.game-log h3::before {
+    content: '📜';
 }
 
-.story {
-    background: #F3E5F5;
+#logMessages {
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+#logMessages p {
+    margin-bottom: 8px;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 5px;
+    border-left: 3px solid #ff6b6b;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* Instructions */
+.instructions {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
     padding: 20px;
     border-radius: 15px;
-    border: 3px solid #8E24AA;
+    border: 3px solid #00ffcc;
+    margin-top: 25px;
 }
 
-.story h3 {
-    color: #7B1FA2;
-    margin-bottom: 10px;
+.instructions h3 {
+    color: #ffd700;
     font-family: 'Press Start 2P', cursive;
-    font-size: 1em;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-.story p {
-    line-height: 1.6;
-    color: #4A148C;
+.instructions h3::before {
+    content: '🎮';
 }
 
-/* Mobile responsive */
+.instructions p {
+    margin-bottom: 10px;
+    color: #a0a0ff;
+    font-size: 1.1em;
+}
+
+/* Keyboard Keys */
+kbd {
+    background: linear-gradient(135deg, #333, #555);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.9em;
+    border: 2px solid #666;
+    box-shadow: 0 3px 0 #222;
+    margin: 0 5px;
+    display: inline-block;
+    min-width: 40px;
+    text-align: center;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #ff6b6b, #ffd700);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #ff4757, #ffcc00);
+}
+
+/* Mobile Responsive */
 @media (max-width: 850px) {
-    #gameCanvas {
-        width: 95%;
-        height: auto;
+    .game-container {
+        padding: 15px;
+        margin: 10px;
     }
     
     h1 {
-        font-size: 1.5em;
+        font-size: 1.8em;
     }
     
-    .hud {
+    #gameCanvas {
+        width: 100%;
+        height: auto;
+        max-width: 100%;
+    }
+    
+    .hud-row {
         flex-direction: column;
+        align-items: stretch;
         gap: 10px;
     }
+    
+    .health-bar {
+        width: 100%;
+    }
+    
+    .rpg-btn {
+        padding: 15px;
+        font-size: 14px;
+        min-width: auto;
+        flex: 1;
+    }
+    
+    .hud-row:last-child {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    .instructions p {
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.4em;
+    }
+    
+    .tagline {
+        font-size: 1em;
+    }
+    
+    .rpg-btn {
+        padding: 12px;
+        font-size: 12px;
+        margin: 3px;
+    }
+    
+    .bread-count {
+        font-size: 18px;
+        padding: 6px 12px;
+    }
+    
+    .game-log {
+        max-height: 150px;
+    }
+}
+
+/* Animation for critical health */
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.health-critical {
+    animation: pulse 0.5s infinite;
+}
+
+/* Status effects */
+.status-effect {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    margin-left: 5px;
+    font-family: 'Press Start 2P', cursive;
+}
+
+.status-poison {
+    background: #9b59b6;
+    color: white;
+}
+
+.status-buff {
+    background: #2ecc71;
+    color: white;
+}
+
+/* Loading animation */
+.loading {
+    text-align: center;
+    padding: 20px;
+}
+
+.loading-dots::after {
+    content: '';
+    animation: dots 1.5s infinite;
+}
+
+@keyframes dots {
+    0%, 20% { content: '.'; }
+    40% { content: '..'; }
+    60%, 100% { content: '...'; }
+}
+
+/* Achievement popup */
+.achievement {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #ffd700, #ff6b6b);
+    color: #000;
+    padding: 15px;
+    border-radius: 10px;
+    border: 3px solid #000;
+    font-family: 'Press Start 2P', cursive;
+    animation: slideIn 0.5s ease, slideOut 0.5s ease 2.5s forwards;
+    z-index: 1000;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOut {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
+}
+
+/* Tooltip */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: help;
+}
+
+.tooltip .tooltip-text {
+    visibility: hidden;
+    width: 200px;
+    background-color: #0f3460;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 10px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -100px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    border: 2px solid #00ffcc;
+    font-family: 'Courier New', monospace;
+}
+
+.tooltip:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
 }
