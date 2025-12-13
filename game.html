@@ -1,1 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Duckling with a Knife - Game</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        /* GAME PAGE STYLES */
+        .game-page {
+            width: 100%;
+            min-height: 100vh;
+            background: #000;
+            overflow: hidden;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+        
+        /* Back Button */
+        .back-button {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(255, 107, 107, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            z-index: 100;
+            box-shadow: 0 0 15px rgba(255, 107, 107, 0.5);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .back-button:active {
+            transform: scale(0.9);
+        }
+        
+        /* Game Container */
+        .game-wrapper {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            padding-top: 70px; /* Space for back button */
+        }
+        
+        /* Game Canvas */
+        #gameCanvas {
+            flex: 1;
+            width: 100%;
+            background: #2a5c3d;
+            border-radius: 10px;
+            border: 3px solid #ffd700;
+            image-rendering: pixelated;
+            touch-action: none;
+        }
+        
+        /* Mobile Controls */
+        .mobile-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 15px;
+            border: 2px solid #00ffcc;
+        }
+        
+        .movement-controls {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 5px;
+            height: 150px;
+            margin-bottom: 10px;
+        }
+        
+        .movement-btn {
+            background: rgba(52, 152, 219, 0.8);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            touch-action: manipulation;
+            user-select: none;
+        }
+        
+        .movement-btn:active {
+            background: rgba(41, 128, 185, 1);
+            transform: scale(0.95);
+        }
+        
+        .up-btn { grid-column: 2; grid-row: 1; }
+        .left-btn { grid-column: 1; grid-row: 2; }
+        .center-btn { 
+            grid-column: 2; 
+            grid-row: 2; 
+            background: rgba(255, 107, 107, 0.5);
+            font-size: 20px;
+        }
+        .right-btn { grid-column: 3; grid-row: 2; }
+        .down-btn { grid-column: 2; grid-row: 3; }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            flex: 1;
+            min-height: 60px;
+            background: linear-gradient(135deg, #ff6b6b, #ff4757);
+            border: 3px solid #ffd700;
+            border-radius: 10px;
+            color: white;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.8em;
+            padding: 10px;
+            touch-action: manipulation;
+        }
+        
+        .action-btn:active {
+            transform: scale(0.95);
+            background: linear-gradient(135deg, #ff4757, #ff3838);
+        }
+        
+        #attackBtn { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+        #quackBtn { background: linear-gradient(135deg, #3498db, #2980b9); }
+        #shopBtn { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+        #sleepBtn { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+        
+        /* Game HUD */
+        .game-hud {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border: 2px solid #4e54c8;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.8em;
+        }
+        
+        .hud-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+        }
+        
+        .health-container {
+            flex: 1;
+        }
+        
+        .health-bar {
+            width: 100%;
+            height: 15px;
+            background: #333;
+            border-radius: 7px;
+            overflow: hidden;
+            border: 2px solid #444;
+        }
+        
+        #healthFill {
+            height: 100%;
+            background: linear-gradient(90deg, #2ecc71, #27ae60);
+            width: 100%;
+            transition: width 0.3s;
+        }
+        
+        /* Bread Counter */
+        .bread-counter {
+            color: #f1c40f;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        /* Time Display */
+        .time-display {
+            color: #00ffcc;
+            font-size: 0.9em;
+            text-align: center;
+            padding: 5px 10px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 5px;
+            border: 1px solid #00ffcc;
+        }
+        
+        /* Game Messages */
+        .game-messages {
+            position: absolute;
+            top: 70px;
+            right: 10px;
+            width: 200px;
+            max-height: 150px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #ff6b6b;
+            border-radius: 10px;
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8em;
+            z-index: 50;
+            display: none;
+        }
+        
+        .message {
+            color: white;
+            margin-bottom: 5px;
+            padding: 5px;
+            border-left: 3px solid #00ffcc;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+        
+        /* Shop Modal */
+        .shop-modal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 400px;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border: 4px solid #ffd700;
+            border-radius: 15px;
+            padding: 20px;
+            z-index: 1000;
+            display: none;
+            font-family: 'Press Start 2P', cursive;
+            color: white;
+        }
+        
+        .shop-header {
+            text-align: center;
+            color: #ffd700;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+        }
+        
+        .shop-items {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .shop-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid #00ffcc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .buy-btn {
+            background: #2ecc71;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .buy-btn:disabled {
+            background: #7f8c8d;
+            cursor: not-allowed;
+        }
+        
+        /* Death Screen */
+        .death-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            font-family: 'Press Start 2P', cursive;
+            color: white;
+            text-align: center;
+        }
+        
+        .death-message {
+            font-size: 2em;
+            color: #ff6b6b;
+            margin-bottom: 20px;
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        /* Loading Screen */
+        .loading-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+            font-family: 'Press Start 2P', cursive;
+            color: white;
+        }
+        
+        .loading-text {
+            margin-top: 20px;
+            color: #00ffcc;
+        }
+        
+        .loading-dots::after {
+            content: '';
+            animation: dots 1.5s infinite;
+        }
+        
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+        
+        /* Desktop warning for game page */
+        @media (min-width: 769px) {
+            .game-page {
+                background: #000;
+            }
+            
+            .desktop-warning {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: #000;
+                color: white;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                padding: 20px;
+                z-index: 10000;
+            }
+            
+            .desktop-warning h2 {
+                color: #ff6b6b;
+                font-size: 2em;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Desktop Warning -->
+    <div class="desktop-warning" id="desktopWarning">
+        <h2>📱 MOBILE ONLY GAME 📱</h2>
+        <p>This game is designed specifically for mobile devices!</p>
+        <p>Please open this page on your smartphone to play.</p>
+        <button onclick="window.location.href='index.html'" 
+                style="background:#ff6b6b; color:white; border:none; padding:15px 30px; border-radius:10px; margin-top:20px; font-size:1.2em;">
+            ← Back to Home
+        </button>
+    </div>
+    
+    <!-- Game Page Content -->
+    <div class="game-page" id="gamePage">
+        <!-- Back Button -->
+        <button class="back-button" onclick="goHome()">←</button>
+        
+        <!-- Loading Screen -->
+        <div class="loading-screen" id="loadingScreen">
+            <div style="font-size: 3em;">🦆🔪</div>
+            <div class="loading-text">Loading Game<span class="loading-dots"></span></div>
+        </div>
+        
+        <!-- Death Screen -->
+        <div class="death-screen" id="deathScreen">
+            <div class="death-message">💀 YOU DIED!</div>
+            <div style="margin-bottom: 20px;">You lost all your bread!</div>
+            <button onclick="respawn()" 
+                    style="background:#ff6b6b; color:white; border:none; padding:15px 30px; border-radius:10px; font-size:1.2em;">
+                RESPAWN
+            </button>
+        </div>
+        
+        <!-- Game Container -->
+        <div class="game-wrapper" id="gameWrapper" style="display: none;">
+            <!-- Game HUD -->
+            <div class="game-hud">
+                <div class="hud-item">
+                    <span>❤️</span>
+                    <div class="health-container">
+                        <div>HP: <span id="healthValue">100</span>/100</div>
+                        <div class="health-bar">
+                            <div id="healthFill" class="health-fill"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="hud-item bread-counter">
+                    <span>🍞</span>
+                    <span id="breadValue">0</span>
+                </div>
+                
+                <div class="hud-item time-display" id="timeDisplay">
+                    DAY 8:00
+                </div>
+            </div>
+            
+            <!-- Game Canvas -->
+            <canvas id="gameCanvas"></canvas>
+            
+            <!-- Game Messages -->
+            <div class="game-messages" id="gameMessages"></div>
+            
+            <!-- Shop Modal -->
+            <div class="shop-modal" id="shopModal">
+                <div class="shop-header">🛒 KNIFE SHOP</div>
+                <div class="shop-items" id="shopItems">
+                    <!-- Items will be added by JavaScript -->
+                </div>
+                <button onclick="closeShop()" 
+                        style="margin-top:20px; width:100%; padding:10px; background:#ff6b6b; color:white; border:none; border-radius:5px;">
+                    CLOSE SHOP
+                </button>
+            </div>
+            
+            <!-- Mobile Controls -->
+            <div class="mobile-controls">
+                <div class="movement-controls">
+                    <button class="movement-btn up-btn" id="upBtn">↑</button>
+                    <button class="movement-btn left-btn" id="leftBtn">←</button>
+                    <button class="movement-btn center-btn" id="centerBtn">🏠</button>
+                    <button class="movement-btn right-btn" id="rightBtn">→</button>
+                    <button class="movement-btn down-btn" id="downBtn">↓</button>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="action-btn" id="attackBtn">🔪 ATTACK</button>
+                    <button class="action-btn" id="quackBtn">🦆 QUACK</button>
+                    <button class="action-btn" id="shopBtn">🛒 SHOP</button>
+                    <button class="action-btn" id="sleepBtn">🏠 SLEEP</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <script src="game.js"></script>
+    <script>
+        // Mobile check
+        function isMobile() {
+            return window.innerWidth <= 768;
+        }
+        
+        // Go back home
+        function goHome() {
+            if (confirm('Return to home? Game will auto-save.')) {
+                window.location.href = 'index.html';
+            }
+        }
+        
+        // Show message
+        function showMessage(text) {
+            const messages = document.getElementById('gameMessages');
+            const message = document.createElement('div');
+            message.className = 'message';
+            message.textContent = text;
+            messages.appendChild(message);
+            
+            // Show messages panel
+            messages.style.display = 'block';
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                messages.style.display = 'none';
+                messages.innerHTML = '';
+            }, 5000);
+            
+            // Scroll to bottom
+            messages.scrollTop = messages.scrollHeight;
+        }
+        
+        // Open shop
+        function openShop() {
+            document.getElementById('shopModal').style.display = 'block';
+            showMessage('Welcome to the Knife Shop!');
+        }
+        
+        // Close shop
+        function closeShop() {
+            document.getElementById('shopModal').style.display = 'none';
+        }
+        
+        // Show death screen
+        function showDeathScreen() {
+            document.getElementById('deathScreen').style.display = 'flex';
+        }
+        
+        // Hide death screen
+        function hideDeathScreen() {
+            document.getElementById('deathScreen').style.display = 'none';
+        }
+        
+        // Respawn player
+        function respawn() {
+            hideDeathScreen();
+            // Game logic will handle respawn in game.js
+            if (window.gameRespawn) {
+                window.gameRespawn();
+            }
+        }
+        
+        // Initialize page
+        window.onload = function() {
+            const loadingScreen = document.getElementById('loadingScreen');
+            const gameWrapper = document.getElementById('gameWrapper');
+            const desktopWarning = document.getElementById('desktopWarning');
+            const gamePage = document.getElementById('gamePage');
+            
+            // Check if mobile
+            if (!isMobile()) {
+                desktopWarning.style.display = 'flex';
+                gamePage.style.display = 'none';
+                return;
+            } else {
+                desktopWarning.style.display = 'none';
+                gamePage.style.display = 'block';
+            }
+            
+            // Simulate loading
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+                gameWrapper.style.display = 'flex';
+                
+                // Initialize game
+                if (window.initGame) {
+                    window.initGame();
+                }
+                
+                // Show welcome message
+                setTimeout(() => {
+                    showMessage('Welcome! Kill bosses for bread!');
+                    showMessage('Your house is by the lake.');
+                    showMessage('Sleep at night to restore health.');
+                }, 1000);
+            }, 2000);
+            
+            // Setup mobile controls
+            const movementBtns = ['upBtn', 'downBtn', 'leftBtn', 'rightBtn'];
+            const actionBtns = ['attackBtn', 'quackBtn', 'shopBtn', 'sleepBtn'];
+            
+            // Movement buttons
+            movementBtns.forEach(btnId => {
+                const btn = document.getElementById(btnId);
+                btn.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    if (window.handleMobileInput) {
+                        window.handleMobileInput(btnId.replace('Btn', ''), true);
+                    }
+                });
+                
+                btn.addEventListener('touchend', (e) => {
+                    e.preventDefault();
+                    if (window.handleMobileInput) {
+                        window.handleMobileInput(btnId.replace('Btn', ''), false);
+                    }
+                });
+            });
+            
+            // Center button (home)
+            document.getElementById('centerBtn').addEventListener('click', () => {
+                showMessage('Go to your house by the lake to sleep!');
+            });
+            
+            // Action buttons
+            actionBtns.forEach(btnId => {
+                const btn = document.getElementById(btnId);
+                btn.addEventListener('click', () => {
+                    if (window.handleAction) {
+                        window.handleAction(btnId.replace('Btn', '').toLowerCase());
+                    }
+                    
+                    // Button feedback
+                    btn.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        btn.style.transform = '';
+                    }, 200);
+                });
+            });
+            
+            // Handle screen resize
+            window.addEventListener('resize', function() {
+                if (!isMobile()) {
+                    window.location.href = 'index.html';
+                }
+            });
+        };
+        
+        // Make functions available to game.js
+        window.showMessage = showMessage;
+        window.openShop = openShop;
+        window.closeShop = closeShop;
+        window.showDeathScreen = showDeathScreen;
+        window.hideDeathScreen = hideDeathScreen;
+    </script>
+</body>
+</html>
