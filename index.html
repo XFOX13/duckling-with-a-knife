@@ -1,1 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duckling with a Knife</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="game-container">
+        <header>
+            <h1>🦆 DUCKLING WITH A KNIFE 🔪</h1>
+            <p class="tagline">They took his bread. Now he takes revenge.</p>
+        </header>
 
+        <div class="game-area">
+            <canvas id="gameCanvas" width="800" height="500"></canvas>
+            
+            <div class="hud">
+                <div class="stat">
+                    <span class="label">🍞 Bread:</span>
+                    <span id="breadCount">0</span>
+                </div>
+                <div class="stat">
+                    <span class="label">❤️ Health:</span>
+                    <span id="healthCount">10</span>
+                </div>
+                <div class="stat">
+                    <span class="label">🔪 Knife:</span>
+                    <span id="knifeStatus">Ready</span>
+                </div>
+            </div>
+
+            <div class="controls">
+                <p>Use <kbd>ARROWS</kbd> to move | <kbd>SPACE</kbd> to attack | <kbd>Q</kbd> to quack</p>
+                <button id="addBreadBtn">🍞 Add Bread (Test)</button>
+                <button id="addEnemyBtn">👨 Add Human (Test)</button>
+            </div>
+        </div>
+
+        <div class="story">
+            <h3>📜 The Story</h3>
+            <p>Once a peaceful duckling by the lake, until humans stole your bread. Now armed with a tiny but fierce knife, you roam the land collecting bread and scaring humans. Your mission: Become the <strong>BREAD KING</strong>!</p>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
