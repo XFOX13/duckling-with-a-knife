@@ -1,501 +1,322 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
+    <title>Duck With A Knife</title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Duckling with a Knife - Home</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        /* HOME PAGE STYLES */
-        .home-container {
-            width: 100%;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #0f3460 0%, #1a1a2e 50%, #16213e 100%);
-            position: relative;
-            overflow: hidden;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            image-rendering: pixelated;
         }
-        
-        /* Animated background */
-        .stars {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
-        
-        .star {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            animation: twinkle 3s infinite;
-        }
-        
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
-        }
-        
-        /* Title Section */
-        .title-section {
-            text-align: center;
-            margin-top: 40px;
-            z-index: 2;
-            animation: float 3s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        
-        .game-title {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 2.5em;
-            color: #ff6b6b;
-            text-shadow: 
-                0 0 10px #ff6b6b,
-                0 0 20px #ff6b6b,
-                0 0 30px #ff6b6b,
-                3px 3px 0 #ffd700;
-            margin-bottom: 10px;
-            line-height: 1.4;
-        }
-        
-        .game-subtitle {
-            color: #00ffcc;
-            font-size: 1.2em;
-            margin-bottom: 30px;
-            text-shadow: 0 0 10px #00ffcc;
-        }
-        
-        /* Character Display */
-        .character-display {
-            position: relative;
-            width: 200px;
-            height: 200px;
-            margin: 20px auto;
-            z-index: 2;
-        }
-        
-        .duckling-sprite {
-            width: 150px;
-            height: 150px;
-            background: #FFEB3B;
-            border-radius: 50% 50% 40% 40%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            animation: bounce 2s infinite;
-        }
-        
-        @keyframes bounce {
-            0%, 100% { transform: translate(-50%, -50%) scale(1); }
-            50% { transform: translate(-50%, -55%) scale(1.05); }
-        }
-        
-        .duckling-eye {
-            width: 15px;
-            height: 15px;
-            background: black;
-            border-radius: 50%;
-            position: absolute;
-            top: 40px;
-            left: 90px;
-        }
-        
-        .duckling-beak {
-            width: 40px;
-            height: 20px;
-            background: #FF9800;
-            border-radius: 50%;
-            position: absolute;
-            top: 70px;
-            left: 120px;
-            transform: rotate(20deg);
-        }
-        
-        .knife {
-            width: 80px;
-            height: 10px;
-            background: linear-gradient(90deg, #7f8c8d, #bdc3c7);
-            position: absolute;
-            top: 85px;
-            left: 160px;
-            transform: rotate(45deg);
-            border-radius: 5px;
-            animation: shine 2s infinite;
-        }
-        
-        @keyframes shine {
-            0%, 100% { filter: brightness(1); }
-            50% { filter: brightness(1.5); }
-        }
-        
-        .knife-handle {
-            width: 20px;
-            height: 20px;
-            background: #8b4513;
-            position: absolute;
-            top: 80px;
-            left: 155px;
-            border-radius: 5px;
-        }
-        
-        /* Menu Buttons */
-        .menu-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            width: 90%;
-            max-width: 300px;
-            margin: 30px 0;
-            z-index: 2;
-        }
-        
-        .menu-btn {
-            background: linear-gradient(135deg, #ff6b6b, #ff4757);
+
+        body {
+            background: #1a1a2e;
             color: white;
-            border: none;
-            padding: 20px;
-            border-radius: 20px;
-            font-family: 'Press Start 2P', cursive;
-            font-size: 1em;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
-            border: 3px solid #ffd700;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .menu-btn:hover, .menu-btn:active {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.6);
-            background: linear-gradient(135deg, #ff4757, #ff3838);
-        }
-        
-        .menu-btn::after {
-            content: '▶';
-            position: absolute;
-            right: 20px;
-            opacity: 0.7;
-        }
-        
-        #startBtn {
-            background: linear-gradient(135deg, #00b894, #00cec9);
-            border-color: #00ffcc;
-        }
-        
-        #startBtn:hover, #startBtn:active {
-            background: linear-gradient(135deg, #00cec9, #00b894);
-        }
-        
-        /* Story Box */
-        .story-box {
-            background: rgba(0, 0, 0, 0.7);
-            border: 3px solid #00ffcc;
-            border-radius: 15px;
-            padding: 20px;
-            margin: 20px;
-            color: white;
-            font-size: 0.9em;
-            line-height: 1.6;
-            z-index: 2;
-            max-width: 500px;
-        }
-        
-        .story-box h3 {
-            color: #ffd700;
-            margin-bottom: 10px;
-            font-size: 1.1em;
-        }
-        
-        /* Footer */
-        .footer {
-            color: #888;
+            font-family: 'Courier New', monospace;
             text-align: center;
             padding: 20px;
-            font-size: 0.8em;
-            z-index: 2;
         }
-        
-        /* Mobile-only warning */
-        .mobile-only {
+
+        .screen {
             display: none;
+            max-width: 400px;
+            margin: 0 auto;
         }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .game-title {
-                font-size: 1.8em;
-            }
-            
-            .menu-btn {
-                padding: 18px;
-                font-size: 0.9em;
-            }
-            
-            .character-display {
-                width: 150px;
-                height: 150px;
-            }
-            
-            .duckling-sprite {
-                width: 120px;
-                height: 120px;
-            }
+
+        .active {
+            display: block;
         }
-        
-        @media (max-width: 480px) {
-            .game-title {
-                font-size: 1.4em;
-            }
-            
-            .game-subtitle {
-                font-size: 1em;
-            }
-            
-            .menu-btn {
-                padding: 16px;
-                font-size: 0.8em;
-            }
+
+        h1 {
+            color: #ffd166;
+            margin: 20px 0;
+            text-shadow: 2px 2px #073b4c;
         }
-        
-        /* Desktop warning */
-        @media (min-width: 769px) {
-            .home-container {
-                background: #000;
-            }
-            
-            .mobile-only {
-                display: block;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: #000;
-                color: white;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                text-align: center;
-                padding: 20px;
-                z-index: 1000;
-            }
-            
-            .mobile-only h2 {
-                color: #ff6b6b;
-                font-size: 2em;
-                margin-bottom: 20px;
-            }
-            
-            .mobile-only p {
-                font-size: 1.2em;
-                margin-bottom: 20px;
-                max-width: 500px;
-            }
-            
-            .qr-code {
-                background: white;
-                padding: 20px;
-                border-radius: 10px;
-                margin-top: 20px;
-                font-family: monospace;
-                color: black;
-            }
+
+        .story-text {
+            background: #073b4c;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border: 2px solid #118ab2;
+        }
+
+        button {
+            background: #06d6a0;
+            color: black;
+            border: none;
+            padding: 12px 24px;
+            margin: 10px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #0ac595;
+        }
+
+        #lake-screen {
+            position: relative;
+        }
+
+        .location {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+            border: 2px solid white;
+            cursor: pointer;
+            width: 100px;
+        }
+
+        #shop-location {
+            top: 50px;
+            right: 30px;
+        }
+
+        #home-location {
+            bottom: 80px;
+            left: 150px;
+        }
+
+        #castle-location {
+            top: 120px;
+            left: 30px;
+        }
+
+        .inventory {
+            background: #073b4c;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #118ab2;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 15px 0;
+        }
+
+        .stat {
+            background: #ef476f;
+            padding: 5px 10px;
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
-    <!-- Desktop Warning -->
-    <div class="mobile-only">
-        <h2>📱 MOBILE ONLY GAME 📱</h2>
-        <p>This game is designed specifically for mobile devices!</p>
-        <p>Please open this page on your smartphone to play.</p>
-        <p>Scan this QR code or enter the URL on your phone:</p>
-        <div class="qr-code">
-            <div style="font-family: monospace; font-size: 0.8em;">
-                [ QR Code: duckling-game.com ]
-            </div>
-        </div>
-        <p style="margin-top: 20px; color: #888;">
-            (Or resize your browser window to mobile size to continue)
-        </p>
-    </div>
-    
-    <!-- Home Page Content -->
-    <div class="home-container">
-        <!-- Animated Stars Background -->
-        <div class="stars" id="stars"></div>
-        
-        <!-- Title Section -->
-        <div class="title-section">
-            <h1 class="game-title">DUCKLING<br>WITH A KNIFE</h1>
-            <p class="game-subtitle">A Zelda-like RPG Adventure</p>
-        </div>
-        
-        <!-- Character Display -->
-        <div class="character-display">
-            <div class="duckling-sprite">
-                <div class="duckling-eye"></div>
-                <div class="duckling-beak"></div>
-            </div>
-            <div class="knife-handle"></div>
-            <div class="knife"></div>
-        </div>
-        
-        <!-- Menu Buttons -->
-        <div class="menu-buttons">
-            <button class="menu-btn" id="startBtn" onclick="startGame()">
-                🎮 START GAME
-            </button>
-            <button class="menu-btn" onclick="showInstructions()">
-                📖 HOW TO PLAY
-            </button>
-            <button class="menu-btn" onclick="showStory()">
-                📜 STORY
-            </button>
-            <button class="menu-btn" onclick="showSettings()">
-                ⚙️ SETTINGS
-            </button>
-        </div>
-        
-        <!-- Story Box -->
-        <div class="story-box" id="storyBox" style="display: none;">
-            <h3>📖 THE STORY</h3>
-            <p>Once a peaceful duckling by the lake, until humans stole your precious bread. Now armed with a tiny but fierce knife, you roam the land seeking revenge!</p>
-            <p>Kill bosses for bread, buy upgrades at the shop, and survive the night in your house by the lake. But beware: if you die, you lose everything!</p>
-            <p>Become the legendary <strong>BREAD KING</strong>!</p>
-        </div>
-        
-        <!-- Instructions Box -->
-        <div class="story-box" id="instructionsBox" style="display: none;">
-            <h3>🎮 HOW TO PLAY</h3>
-            <p><strong>Movement:</strong> Use the D-PAD or WASD buttons</p>
-            <p><strong>Attack:</strong> Press ATTACK button or SPACE</p>
-            <p><strong>Quack:</strong> Scare enemies away</p>
-            <p><strong>Shop:</strong> Buy knife upgrades with bread</p>
-            <p><strong>Sleep:</strong> Go home at night to restore health</p>
-            <p><strong>Warning:</strong> If you die, you lose all bread!</p>
-        </div>
-        
-        <!-- Settings Box -->
-        <div class="story-box" id="settingsBox" style="display: none;">
-            <h3>⚙️ SETTINGS</h3>
-            <p>Music: <button onclick="toggleMusic()">🔊 ON</button></p>
-            <p>Sound: <button onclick="toggleSound()">🔔 ON</button></p>
-            <p>Vibration: <button onclick="toggleVibration()">📳 ON</button></p>
-            <p style="margin-top: 20px; color: #ff6b6b;">
-                ⚠️ Game saves automatically!
-            </p>
-        </div>
-        
-        <!-- Footer -->
-        <div class="footer">
-            <p>Made with 🔪 by Duckling Studios</p>
-            <p>Mobile-only RPG • v1.0</p>
+    <!-- MAIN MENU SCREEN -->
+    <div id="main-menu" class="screen active">
+        <h1>🦆🔪 DUCK WITH A KNIFE</h1>
+        <p>A Bread Quest</p>
+        <div style="margin: 40px;">
+            <button id="start-btn">START GAME</button><br>
+            <button id="credits-btn">CREDITS</button>
         </div>
     </div>
 
+    <!-- STORY SCREEN -->
+    <div id="story-screen" class="screen">
+        <h1>THE STORY</h1>
+        <div class="story-text">
+            <p>You were just a normal duck at Crumb Lake.</p>
+            <p>Until the humans stole your bread...</p>
+            <p>Now you roam with a knife, collecting bread</p>
+            <p>and scaring anyone who stands in your way.</p>
+            <p>Your goal: Become the BREAD KING!</p>
+        </div>
+        <div id="story-images">
+            <!-- ADD YOUR PIXEL ART IMAGES HERE -->
+            <p>[Image: Duck peacefully swimming]</p>
+            <p>[Image: Human stealing bread]</p>
+            <p>[Image: Duck holding knife menacingly]</p>
+        </div>
+        <button id="continue-btn">CONTINUE</button>
+    </div>
+
+    <!-- LAKE SCREEN (MAIN GAME) -->
+    <div id="lake-screen" class="screen">
+        <h1>CRUMB LAKE</h1>
+        <div class="inventory">
+            Bread: <span id="bread-count">5</span> | 
+            Knife Level: <span id="knife-level">1</span>
+        </div>
+        <div class="stats">
+            <div class="stat">HP: 20/20</div>
+            <div class="stat">Attack: 5</div>
+            <div class="stat">Fluff: 100%</div>
+        </div>
+        
+        <!-- Lake Background (you'll replace with pixel art) -->
+        <div style="background: #118ab2; height: 250px; border: 4px solid #073b4c; margin: 20px 0; position: relative;">
+            <p>[Lake Pixel Art Here]</p>
+            
+            <!-- Interactive Locations -->
+            <div id="shop-location" class="location">
+                🏪 SHOP
+            </div>
+            <div id="home-location" class="location">
+                🏠 HOME
+            </div>
+            <div id="castle-location" class="location">
+                🏰 CASTLE
+            </div>
+        </div>
+        
+        <button id="menu-btn">MENU</button>
+    </div>
+
+    <!-- SHOP SCREEN -->
+    <div id="shop-screen" class="screen">
+        <h1>🛒 BREAD SHOP</h1>
+        <p>Bread: <span id="shop-bread">5</span></p>
+        <div style="margin: 20px;">
+            <button class="shop-item">🍞 Bread (Heal 5 HP) - 1 Bread</button><br>
+            <button class="shop-item">🔪 Sharp Knife (+2 Attack) - 10 Bread</button><br>
+            <button class="shop-item">🎩 Tiny Hat (+5 Max HP) - 8 Bread</button><br>
+            <button class="shop-item">🛡️ Shield (Block) - 15 Bread</button>
+        </div>
+        <button id="back-from-shop">BACK TO LAKE</button>
+    </div>
+
+    <!-- HOME SCREEN -->
+    <div id="home-screen" class="screen">
+        <h1>🏠 DUCK NEST</h1>
+        <p>Your cozy home by the lake.</p>
+        <div style="margin: 20px;">
+            <button id="rest-btn">🛌 Rest (Full Heal)</button><br>
+            <button id="upgrade-btn">⚡ Upgrade Knife</button><br>
+            <button id="store-btn">📦 Store Bread</button>
+        </div>
+        <div class="story-text">
+            Stored Bread: <span id="stored-bread">0</span><br>
+            Knife Sharpness: <span id="sharpness">50%</span>
+        </div>
+        <button id="back-from-home">BACK TO LAKE</button>
+    </div>
+
+    <!-- CASTLE SCREEN -->
+    <div id="castle-screen" class="screen">
+        <h1>🏰 BREAD CASTLE</h1>
+        <div class="story-text">
+            <p>The human king stole all the bread.</p>
+            <p>He's guarded by robot birds!</p>
+            <p>Bring him to justice!</p>
+        </div>
+        <div style="margin: 20px;">
+            <button id="fight-btn">⚔️ FIGHT KING</button><br>
+            <button id="sneak-btn">👟 SNEAK IN</button><br>
+            <button id="intimidate-btn">😠 INTIMIDATE</button>
+        </div>
+        <button id="back-from-castle">BACK TO LAKE</button>
+    </div>
+
     <script>
-        // Create stars for background
-        function createStars() {
-            const stars = document.getElementById('stars');
-            for (let i = 0; i < 100; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                star.style.width = Math.random() * 3 + 'px';
-                star.style.height = star.style.width;
-                star.style.left = Math.random() * 100 + '%';
-                star.style.top = Math.random() * 100 + '%';
-                star.style.animationDelay = Math.random() * 5 + 's';
-                stars.appendChild(star);
+        // GAME STATE
+        let gameState = {
+            bread: 5,
+            knifeLevel: 1,
+            hp: 20,
+            maxHp: 20,
+            attack: 5,
+            storedBread: 0,
+            currentScreen: 'main-menu'
+        };
+
+        // SCREEN MANAGEMENT
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+            gameState.currentScreen = screenId;
+            updateUI();
+        }
+
+        function updateUI() {
+            // Update bread count everywhere
+            document.querySelectorAll('#bread-count, #shop-bread').forEach(el => {
+                el.textContent = gameState.bread;
+            });
+            document.getElementById('knife-level').textContent = gameState.knifeLevel;
+            document.getElementById('stored-bread').textContent = gameState.storedBread;
+        }
+
+        // BUTTON EVENT LISTENERS
+        document.getElementById('start-btn').addEventListener('click', () => showScreen('story-screen'));
+        document.getElementById('continue-btn').addEventListener('click', () => showScreen('lake-screen'));
+        document.getElementById('menu-btn').addEventListener('click', () => showScreen('main-menu'));
+        
+        // Location buttons (Lake → other screens)
+        document.getElementById('shop-location').addEventListener('click', () => showScreen('shop-screen'));
+        document.getElementById('home-location').addEventListener('click', () => showScreen('home-screen'));
+        document.getElementById('castle-location').addEventListener('click', () => showScreen('castle-screen'));
+        
+        // Back buttons
+        document.getElementById('back-from-shop').addEventListener('click', () => showScreen('lake-screen'));
+        document.getElementById('back-from-home').addEventListener('click', () => showScreen('lake-screen'));
+        document.getElementById('back-from-castle').addEventListener('click', () => showScreen('lake-screen'));
+        
+        // Home screen actions
+        document.getElementById('rest-btn').addEventListener('click', () => {
+            gameState.hp = gameState.maxHp;
+            alert('You rested! HP fully restored.');
+        });
+        
+        document.getElementById('store-btn').addEventListener('click', () => {
+            if (gameState.bread > 0) {
+                gameState.storedBread += gameState.bread;
+                gameState.bread = 0;
+                updateUI();
+                alert('All bread stored safely!');
             }
-        }
+        });
         
-        // Start Game
-        function startGame() {
-            // Vibrate if supported
-            if (navigator.vibrate) {
-                navigator.vibrate(100);
-            }
-            
-            // Add click effect
-            const btn = document.getElementById('startBtn');
-            btn.style.transform = 'scale(0.95)';
-            setTimeout(() => {
-                btn.style.transform = '';
-                // Navigate to game page
-                window.location.href = 'game.html';
-            }, 200);
-        }
+        // Shop items
+        document.querySelectorAll('.shop-item').forEach((btn, index) => {
+            btn.addEventListener('click', () => {
+                const prices = [1, 10, 8, 15];
+                const messages = [
+                    'You ate bread! HP +5',
+                    'Knife upgraded! Attack +2',
+                    'Tiny hat equipped! Max HP +5',
+                    'Shield equipped! Can now block'
+                ];
+                
+                if (gameState.bread >= prices[index]) {
+                    gameState.bread -= prices[index];
+                    alert(messages[index]);
+                    updateUI();
+                } else {
+                    alert('Not enough bread!');
+                }
+            });
+        });
         
-        // Show Instructions
-        function showInstructions() {
-            document.getElementById('storyBox').style.display = 'none';
-            document.getElementById('settingsBox').style.display = 'none';
-            const box = document.getElementById('instructionsBox');
-            box.style.display = box.style.display === 'none' ? 'block' : 'none';
-        }
+        // Castle actions
+        document.getElementById('fight-btn').addEventListener('click', () => {
+            alert('You attack the king! (Boss battle placeholder)');
+        });
         
-        // Show Story
-        function showStory() {
-            document.getElementById('instructionsBox').style.display = 'none';
-            document.getElementById('settingsBox').style.display = 'none';
-            const box = document.getElementById('storyBox');
-            box.style.display = box.style.display === 'none' ? 'block' : 'none';
-        }
-        
-        // Show Settings
-        function showSettings() {
-            document.getElementById('storyBox').style.display = 'none';
-            document.getElementById('instructionsBox').style.display = 'none';
-            const box = document.getElementById('settingsBox');
-            box.style.display = box.style.display === 'none' ? 'block' : 'none';
-        }
-        
-        // Settings functions
-        function toggleMusic() {
-            alert('Music toggle - will implement sound later!');
-        }
-        
-        function toggleSound() {
-            alert('Sound toggle - will implement sound later!');
-        }
-        
-        function toggleVibration() {
-            alert('Vibration toggle - will implement later!');
-        }
-        
+        document.getElementById('intimidate-btn').addEventListener('click', () => {
+            alert('You wave your knife menacingly! The king is scared!');
+            gameState.bread += 3;
+            updateUI();
+        });
+
+        // CREDITS
+        document.getElementById('credits-btn').addEventListener('click', () => {
+            alert('Made by YOU!\nDuck with a Knife - Chapter 1\nPixel art coming soon!');
+        });
+
         // Initialize
-        window.onload = function() {
-            createStars();
-            
-            // Hide desktop warning on mobile
-            if (window.innerWidth <= 768) {
-                document.querySelector('.mobile-only').style.display = 'none';
-            }
-        };
-        
-        // Check screen size on resize
-        window.onresize = function() {
-            if (window.innerWidth <= 768) {
-                document.querySelector('.mobile-only').style.display = 'none';
-            } else {
-                document.querySelector('.mobile-only').style.display = 'flex';
-            }
-        };
+        updateUI();
     </script>
 </body>
 </html>
