@@ -1,322 +1,87 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-    <title>Duck With A Knife</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            image-rendering: pixelated;
-        }
-
-        body {
-            background: #1a1a2e;
-            color: white;
-            font-family: 'Courier New', monospace;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .screen {
-            display: none;
-            max-width: 400px;
-            margin: 0 auto;
-        }
-
-        .active {
-            display: block;
-        }
-
-        h1 {
-            color: #ffd166;
-            margin: 20px 0;
-            text-shadow: 2px 2px #073b4c;
-        }
-
-        .story-text {
-            background: #073b4c;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 15px 0;
-            border: 2px solid #118ab2;
-        }
-
-        button {
-            background: #06d6a0;
-            color: black;
-            border: none;
-            padding: 12px 24px;
-            margin: 10px;
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        button:hover {
-            background: #0ac595;
-        }
-
-        #lake-screen {
-            position: relative;
-        }
-
-        .location {
-            position: absolute;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 10px;
-            border-radius: 5px;
-            border: 2px solid white;
-            cursor: pointer;
-            width: 100px;
-        }
-
-        #shop-location {
-            top: 50px;
-            right: 30px;
-        }
-
-        #home-location {
-            bottom: 80px;
-            left: 150px;
-        }
-
-        #castle-location {
-            top: 120px;
-            left: 30px;
-        }
-
-        .inventory {
-            background: #073b4c;
-            padding: 10px;
-            margin: 10px 0;
-            border: 2px solid #118ab2;
-        }
-
-        .stats {
-            display: flex;
-            justify-content: space-around;
-            margin: 15px 0;
-        }
-
-        .stat {
-            background: #ef476f;
-            padding: 5px 10px;
-            border-radius: 5px;
-        }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Duckling With A Knife</title>
+  <link rel="stylesheet" href="style.css">
+  <meta name="description" content="Duckling With A Knife — a small pixel RPG">
 </head>
 <body>
-    <!-- MAIN MENU SCREEN -->
-    <div id="main-menu" class="screen active">
-        <h1>🦆🔪 DUCK WITH A KNIFE</h1>
-        <p>A Bread Quest</p>
-        <div style="margin: 40px;">
-            <button id="start-btn">START GAME</button><br>
-            <button id="credits-btn">CREDITS</button>
-        </div>
+  <!-- Main Menu -->
+  <div id="main-menu" class="overlay center">
+    <h1 class="title">Duckling With A Knife</h1>
+    <div class="menu-buttons">
+      <button id="start-btn" class="big">Start</button>
+      <button id="credits-btn">Credits</button>
+      <button id="how-btn">How to Play</button>
     </div>
+    <small class="muted">Pixel art — add your own sprites inside /assets</small>
+  </div>
 
-    <!-- STORY SCREEN -->
-    <div id="story-screen" class="screen">
-        <h1>THE STORY</h1>
-        <div class="story-text">
-            <p>You were just a normal duck at Crumb Lake.</p>
-            <p>Until the humans stole your bread...</p>
-            <p>Now you roam with a knife, collecting bread</p>
-            <p>and scaring anyone who stands in your way.</p>
-            <p>Your goal: Become the BREAD KING!</p>
-        </div>
-        <div id="story-images">
-            <!-- ADD YOUR PIXEL ART IMAGES HERE -->
-            <p>[Image: Duck peacefully swimming]</p>
-            <p>[Image: Human stealing bread]</p>
-            <p>[Image: Duck holding knife menacingly]</p>
-        </div>
-        <button id="continue-btn">CONTINUE</button>
+  <!-- Story Modal / Slideshow -->
+  <div id="story-modal" class="overlay hidden">
+    <div class="story-card">
+      <img id="story-img" src="assets/story1.png" alt="story" onerror="this.style.display='none'">
+      <p id="story-text"></p>
+      <div class="story-controls">
+        <button id="story-prev">Prev</button>
+        <button id="story-next">Next</button>
+        <button id="story-skip">Skip</button>
+      </div>
     </div>
+  </div>
 
-    <!-- LAKE SCREEN (MAIN GAME) -->
-    <div id="lake-screen" class="screen">
-        <h1>CRUMB LAKE</h1>
-        <div class="inventory">
-            Bread: <span id="bread-count">5</span> | 
-            Knife Level: <span id="knife-level">1</span>
+  <!-- Game HUD + Canvas -->
+  <div id="game-root" class="hidden">
+    <header class="hud">
+      <div id="hud-left">
+        <button class="small" id="open-menu">☰</button>
+        <span id="screen-name">Home</span>
+      </div>
+      <div id="hud-right">
+        Bread: <span id="bread-count">0</span>
+      </div>
+    </header>
+
+    <main id="game-area">
+      <canvas id="game-canvas" width="320" height="240"></canvas>
+
+      <!-- Simple UI menu for screens -->
+      <nav id="screen-nav" class="bottom-nav">
+        <button data-screen="home">Home</button>
+        <button data-screen="shop">Shop</button>
+        <button data-screen="lake">Lake</button>
+        <button data-screen="castle">Castle</button>
+      </nav>
+
+      <!-- Touch Controls -->
+      <div id="controls">
+        <div id="dpad">
+          <button class="dbtn up" data-dir="up">▲</button>
+          <div class="hrow">
+            <button class="dbtn left" data-dir="left">◀</button>
+            <button class="dbtn right" data-dir="right">▶</button>
+          </div>
+          <button class="dbtn down" data-dir="down">▼</button>
         </div>
-        <div class="stats">
-            <div class="stat">HP: 20/20</div>
-            <div class="stat">Attack: 5</div>
-            <div class="stat">Fluff: 100%</div>
-        </div>
-        
-        <!-- Lake Background (you'll replace with pixel art) -->
-        <div style="background: #118ab2; height: 250px; border: 4px solid #073b4c; margin: 20px 0; position: relative;">
-            <p>[Lake Pixel Art Here]</p>
-            
-            <!-- Interactive Locations -->
-            <div id="shop-location" class="location">
-                🏪 SHOP
-            </div>
-            <div id="home-location" class="location">
-                🏠 HOME
-            </div>
-            <div id="castle-location" class="location">
-                🏰 CASTLE
-            </div>
-        </div>
-        
-        <button id="menu-btn">MENU</button>
+        <button id="action-btn">Knife</button>
+      </div>
+    </main>
+  </div>
+
+  <!-- Small menu / pause overlay -->
+  <div id="pause-menu" class="overlay hidden">
+    <div class="story-card">
+      <h3>Menu</h3>
+      <button id="resume-btn">Resume</button>
+      <button id="goto-home">Go to Home</button>
+      <button id="goto-shop">Go to Shop</button>
+      <button id="goto-castle">Go to Castle</button>
+      <button id="back-to-main">Back to Main Menu</button>
     </div>
+  </div>
 
-    <!-- SHOP SCREEN -->
-    <div id="shop-screen" class="screen">
-        <h1>🛒 BREAD SHOP</h1>
-        <p>Bread: <span id="shop-bread">5</span></p>
-        <div style="margin: 20px;">
-            <button class="shop-item">🍞 Bread (Heal 5 HP) - 1 Bread</button><br>
-            <button class="shop-item">🔪 Sharp Knife (+2 Attack) - 10 Bread</button><br>
-            <button class="shop-item">🎩 Tiny Hat (+5 Max HP) - 8 Bread</button><br>
-            <button class="shop-item">🛡️ Shield (Block) - 15 Bread</button>
-        </div>
-        <button id="back-from-shop">BACK TO LAKE</button>
-    </div>
-
-    <!-- HOME SCREEN -->
-    <div id="home-screen" class="screen">
-        <h1>🏠 DUCK NEST</h1>
-        <p>Your cozy home by the lake.</p>
-        <div style="margin: 20px;">
-            <button id="rest-btn">🛌 Rest (Full Heal)</button><br>
-            <button id="upgrade-btn">⚡ Upgrade Knife</button><br>
-            <button id="store-btn">📦 Store Bread</button>
-        </div>
-        <div class="story-text">
-            Stored Bread: <span id="stored-bread">0</span><br>
-            Knife Sharpness: <span id="sharpness">50%</span>
-        </div>
-        <button id="back-from-home">BACK TO LAKE</button>
-    </div>
-
-    <!-- CASTLE SCREEN -->
-    <div id="castle-screen" class="screen">
-        <h1>🏰 BREAD CASTLE</h1>
-        <div class="story-text">
-            <p>The human king stole all the bread.</p>
-            <p>He's guarded by robot birds!</p>
-            <p>Bring him to justice!</p>
-        </div>
-        <div style="margin: 20px;">
-            <button id="fight-btn">⚔️ FIGHT KING</button><br>
-            <button id="sneak-btn">👟 SNEAK IN</button><br>
-            <button id="intimidate-btn">😠 INTIMIDATE</button>
-        </div>
-        <button id="back-from-castle">BACK TO LAKE</button>
-    </div>
-
-    <script>
-        // GAME STATE
-        let gameState = {
-            bread: 5,
-            knifeLevel: 1,
-            hp: 20,
-            maxHp: 20,
-            attack: 5,
-            storedBread: 0,
-            currentScreen: 'main-menu'
-        };
-
-        // SCREEN MANAGEMENT
-        function showScreen(screenId) {
-            document.querySelectorAll('.screen').forEach(screen => {
-                screen.classList.remove('active');
-            });
-            document.getElementById(screenId).classList.add('active');
-            gameState.currentScreen = screenId;
-            updateUI();
-        }
-
-        function updateUI() {
-            // Update bread count everywhere
-            document.querySelectorAll('#bread-count, #shop-bread').forEach(el => {
-                el.textContent = gameState.bread;
-            });
-            document.getElementById('knife-level').textContent = gameState.knifeLevel;
-            document.getElementById('stored-bread').textContent = gameState.storedBread;
-        }
-
-        // BUTTON EVENT LISTENERS
-        document.getElementById('start-btn').addEventListener('click', () => showScreen('story-screen'));
-        document.getElementById('continue-btn').addEventListener('click', () => showScreen('lake-screen'));
-        document.getElementById('menu-btn').addEventListener('click', () => showScreen('main-menu'));
-        
-        // Location buttons (Lake → other screens)
-        document.getElementById('shop-location').addEventListener('click', () => showScreen('shop-screen'));
-        document.getElementById('home-location').addEventListener('click', () => showScreen('home-screen'));
-        document.getElementById('castle-location').addEventListener('click', () => showScreen('castle-screen'));
-        
-        // Back buttons
-        document.getElementById('back-from-shop').addEventListener('click', () => showScreen('lake-screen'));
-        document.getElementById('back-from-home').addEventListener('click', () => showScreen('lake-screen'));
-        document.getElementById('back-from-castle').addEventListener('click', () => showScreen('lake-screen'));
-        
-        // Home screen actions
-        document.getElementById('rest-btn').addEventListener('click', () => {
-            gameState.hp = gameState.maxHp;
-            alert('You rested! HP fully restored.');
-        });
-        
-        document.getElementById('store-btn').addEventListener('click', () => {
-            if (gameState.bread > 0) {
-                gameState.storedBread += gameState.bread;
-                gameState.bread = 0;
-                updateUI();
-                alert('All bread stored safely!');
-            }
-        });
-        
-        // Shop items
-        document.querySelectorAll('.shop-item').forEach((btn, index) => {
-            btn.addEventListener('click', () => {
-                const prices = [1, 10, 8, 15];
-                const messages = [
-                    'You ate bread! HP +5',
-                    'Knife upgraded! Attack +2',
-                    'Tiny hat equipped! Max HP +5',
-                    'Shield equipped! Can now block'
-                ];
-                
-                if (gameState.bread >= prices[index]) {
-                    gameState.bread -= prices[index];
-                    alert(messages[index]);
-                    updateUI();
-                } else {
-                    alert('Not enough bread!');
-                }
-            });
-        });
-        
-        // Castle actions
-        document.getElementById('fight-btn').addEventListener('click', () => {
-            alert('You attack the king! (Boss battle placeholder)');
-        });
-        
-        document.getElementById('intimidate-btn').addEventListener('click', () => {
-            alert('You wave your knife menacingly! The king is scared!');
-            gameState.bread += 3;
-            updateUI();
-        });
-
-        // CREDITS
-        document.getElementById('credits-btn').addEventListener('click', () => {
-            alert('Made by YOU!\nDuck with a Knife - Chapter 1\nPixel art coming soon!');
-        });
-
-        // Initialize
-        updateUI();
-    </script>
+  <script src="app.js"></script>
 </body>
 </html>
